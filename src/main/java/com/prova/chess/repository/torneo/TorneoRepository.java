@@ -17,4 +17,5 @@ public interface TorneoRepository extends CrudRepository<Torneo, Long> {
     Torneo findByIdEager(Long idTorneo);
 
 
+
 }

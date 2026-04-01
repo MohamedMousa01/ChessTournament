@@ -44,12 +44,12 @@ public class SecurityConfig  {
 				// Configure endpoint authorization
 				.authorizeHttpRequests(auth -> auth
 						// Public endpoints
-						.requestMatchers("/api/auth/login").permitAll()
+						.requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
 
 						// Role-based endpoints
 						.requestMatchers("/api/utente/userInfo").authenticated()
 						.requestMatchers("/api/utente/**").hasRole("ADMIN")
-						.requestMatchers("/**").hasAnyRole("ADMIN", "CLASSIC_USER")
+						.requestMatchers("/**").hasAnyRole("ADMIN", "PLAYER", "ORGANIZER")
 
 						// All other endpoints require authentication
 						.anyRequest().authenticated()
