@@ -48,7 +48,7 @@ public class SecurityConfig  {
 
 						// Role-based endpoints
 						.requestMatchers("/api/utente/userInfo").authenticated()
-						.requestMatchers("/api/utente/**").hasRole("ADMIN")
+						.requestMatchers("/api/admin/**").hasRole("ADMIN")
 						.requestMatchers("/**").hasAnyRole("ADMIN", "PLAYER", "ORGANIZER")
 
 						// All other endpoints require authentication
