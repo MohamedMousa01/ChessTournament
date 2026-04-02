@@ -1,5 +1,6 @@
 package com.prova.chess.service;
 
+import com.prova.chess.dto.UtenteDTO;
 import com.prova.chess.model.Stato;
 import com.prova.chess.model.Utente;
 import com.prova.chess.repository.utente.UtenteRepository;
@@ -34,7 +35,7 @@ public class UtenteServiceImpl implements UtenteService {
 	}
 
 	@Transactional
-	public void aggiorna(Utente utenteInstance) {
+	public Utente aggiorna(Utente utenteInstance) {
 		// deve aggiornare solo nome, cognome, username, ruoli
 		Utente utenteReloaded = repository.findById(utenteInstance.getId()).orElse(null);
 		if (utenteReloaded == null)
@@ -43,15 +44,15 @@ public class UtenteServiceImpl implements UtenteService {
 		utenteReloaded.setCognome(utenteInstance.getCognome());
 		utenteReloaded.setUsername(utenteInstance.getUsername());
 		utenteReloaded.setRuoli(utenteInstance.getRuoli());
-		repository.save(utenteReloaded);
+		return repository.save(utenteReloaded);
 	}
 
 	@Transactional
-	public void inserisciNuovo(Utente utenteInstance) {
+	public Utente inserisciNuovo(Utente utenteInstance) {
 		utenteInstance.setStato(Stato.ATTIVO);
 		utenteInstance.setPassword(passwordEncoder.encode(utenteInstance.getPassword()));
 		utenteInstance.setDataRegistrazione(LocalDate.now());
-		repository.save(utenteInstance);
+		return repository.save(utenteInstance);
 	}
 
 	@Transactional

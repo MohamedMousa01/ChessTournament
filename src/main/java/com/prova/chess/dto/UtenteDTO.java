@@ -125,4 +125,24 @@ public class UtenteDTO {
 		// per evitare problemi di persistenza/fetch
 		return result;
 	}
+
+
+	public Utente buildUtenteModelNoPass(boolean includeId) {
+		Utente result = new Utente();
+		if (includeId) {
+			result.setId(this.id);
+		}
+		result.setNome(this.nome);
+		result.setCognome(this.cognome);
+		result.setUsername(this.username);
+		result.setPassword(this.password);
+		result.setDataRegistrazione(this.dataRegistrazione);
+		result.setStato(this.stato);
+		result.setEloRating(this.eloRating);
+		result.setMontePremi(this.montePremi);
+		// I ruoli e i tornei vengono solitamente gestiti nel Service
+		// per evitare problemi di persistenza/fetch
+		return result;
+	}
+
 }

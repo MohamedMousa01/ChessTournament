@@ -1,5 +1,6 @@
 package com.prova.chess.service;
 
+import com.prova.chess.dto.UtenteDTO;
 import com.prova.chess.model.Utente;
 
 import java.util.List;
@@ -12,9 +13,9 @@ public interface UtenteService {
 
 	public Utente caricaSingoloUtenteConRuoli(Long id);
 
-	public void aggiorna(Utente utenteInstance);
+	public Utente aggiorna(Utente utenteInstance);
 
-	public void inserisciNuovo(Utente utenteInstance);
+	public Utente inserisciNuovo(Utente utenteInstance);
 
 	public void rimuovi(Long idToRemove);
 
