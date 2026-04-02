@@ -1,5 +1,6 @@
 package com.prova.chess.security;
 
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,13 +44,15 @@ public class SecurityConfig  {
 
 				// Configure endpoint authorization
 				.authorizeHttpRequests(auth -> auth
+						.dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.FORWARD).permitAll()
 						// Public endpoints
 						.requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
 
 						// Role-based endpoints
 						.requestMatchers("/api/utente/userInfo").authenticated()
+						.requestMatchers("/api/tornei").hasAnyRole("ADMIN", "ORGANIZER")
 						.requestMatchers("/api/admin/**").hasRole("ADMIN")
-						.requestMatchers("/**").hasAnyRole("ADMIN", "PLAYER", "ORGANIZER")
+				//		.requestMatchers("/**").hasAnyRole("ADMIN", "PLAYER", "ORGANIZER")
 
 						// All other endpoints require authentication
 						.anyRequest().authenticated()

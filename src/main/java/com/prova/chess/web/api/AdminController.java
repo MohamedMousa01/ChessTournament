@@ -12,7 +12,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -73,6 +72,9 @@ public class AdminController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body(ResponseBusta.error(400, "I dati dell'utente sono mancanti"));
         }
+
+        //devo fare il controllo dove non si puo inserire un utente con usernamen già in uso
+
         Utente utente = utenteService.inserisciNuovo(utenteInput.buildUtenteModel(false));
         UtenteDTO utenteDTO = UtenteDTO.buildUtenteDTOFromModel(utente);
 

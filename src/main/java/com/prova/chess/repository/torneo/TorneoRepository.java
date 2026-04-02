@@ -20,4 +20,6 @@ public interface TorneoRepository extends CrudRepository<Torneo, Long>, JpaRepos
     @Query("select distinct t from Torneo t left join fetch t.partecipanti where t.utenteCreazione = ?1 ")
     List<Torneo> findByUtenteCreazione(Utente utenteCreazione);
 
+    @Query("select distinct t from Torneo t left join fetch t.partecipanti where t.denominazione = ?1 AND t.eloMinimo = ?2")
+    List<Torneo> findByDenominazioneAndElominimo(String denominazione , Integer eloMinimo);
 }

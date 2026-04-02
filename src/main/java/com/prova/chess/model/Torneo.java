@@ -36,7 +36,7 @@ public class Torneo {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "torneo")
     private Set<Utente> partecipanti = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "utente_creazione_id") // Nome della colonna nel DB
     private Utente utenteCreazione;
 
