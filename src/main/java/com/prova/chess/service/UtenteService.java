@@ -19,6 +19,8 @@ public interface UtenteService {
 
 	public void rimuovi(Long idToRemove);
 
+	public UtenteDTO disattiva(Long id);
+
 	public List<Utente> findByExample(Utente example);
 
 	public Utente findByUsernameAndPassword(String username, String password);

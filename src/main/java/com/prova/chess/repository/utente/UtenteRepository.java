@@ -21,4 +21,7 @@ public interface UtenteRepository extends CrudRepository<Utente, Long> {
 	//caricamento eager, ovviamente si può fare anche con jpql
 	@EntityGraph(attributePaths = { "ruoli" })
 	Utente findByUsernameAndPasswordAndStato(String username,String password, Stato stato);
+
+//	@Query("select ")
+//	Utente disattivaById(Long id);
 }

@@ -58,7 +58,16 @@ public class UtenteServiceImpl implements UtenteService {
 	@Transactional
 	public void rimuovi(Long idToRemove) {
 		repository.deleteById(idToRemove);
-		;
+	}
+
+	public UtenteDTO disattiva(Long id){
+		Utente utente = repository.findById(id).orElseThrow(() -> new RuntimeException("Utente con ID " + id + " non trovato"));
+
+		utente.setStato(Stato.DISABILITATO);
+		Utente utenteAggiornato = repository.save(utente);
+
+		return UtenteDTO.buildUtenteDTOFromModel(utenteAggiornato);
+
 	}
 
 	public List<Utente> findByExample(Utente example) {

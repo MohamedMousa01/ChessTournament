@@ -95,6 +95,22 @@ public class AdminController {
     }
 
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseBusta<UtenteDTO>> delete( @PathVariable(required = true) Long id){
+
+        try {
+            UtenteDTO utenteDisattivato = utenteService.disattiva(id);
+
+            return ResponseEntity.ok(
+                    ResponseBusta.success(200, utenteDisattivato, "Utente disattivato con successo")
+            );
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(ResponseBusta.error(404, e.getMessage()));
+        }
+
+    }
 
 
 }
