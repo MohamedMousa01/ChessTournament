@@ -68,4 +68,14 @@ public class CustomExceptionHandler  {
 
 	}
 
+
+	@ExceptionHandler(TorneoNonTrovatoException.class)
+	public ResponseEntity<ResponseBusta<String>> handleTorneoNonTrovatoException(TorneoNonTrovatoException ex, WebRequest request) {
+
+		ResponseBusta<String> busta = ResponseBusta.error(204, ex.getMessage());
+		return new ResponseEntity<>(busta, HttpStatus.FORBIDDEN);
+
+	}
+
+
 }

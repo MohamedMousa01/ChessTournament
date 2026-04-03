@@ -22,6 +22,8 @@ public interface TorneoService {
     public TorneoDTO disattiva(Long id);
 
     public  List<Torneo> ricercaCompatibili();
-//
-//    public TorneoDTO abbandonaTorneo();
+
+    public TorneoDTO abbandonaTorneo();
+
+    public TorneoDTO trovaTorneo();
 }

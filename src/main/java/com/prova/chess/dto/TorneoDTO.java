@@ -1,5 +1,6 @@
 package com.prova.chess.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.prova.chess.model.Stato;
 import com.prova.chess.model.Torneo;
@@ -31,7 +32,7 @@ public class TorneoDTO {
     @Min(value = 2, message = "Il numero minimo di giocatori non può essere negativo")
     private Integer maxGiocatori;
 
-    private Utente utenteCreazione;
+    private UtenteDTO utenteCreazione;
 
     private Set<UtenteDTO> partecipanti;
 
@@ -47,7 +48,7 @@ public class TorneoDTO {
         this.eloMinimo = eloMinimo;
         this.quotaIscrizione = quotaIscrizione;
         this.maxGiocatori = maxGiocatori;
-        this.utenteCreazione = utenteCreazione;
+        this.utenteCreazione =  UtenteDTO.buildUtenteDTOFromModel(utenteCreazione);
     }
 
     // --- Getters e Setters ---
@@ -73,8 +74,8 @@ public class TorneoDTO {
     public Integer getMaxGiocatori() { return maxGiocatori; }
     public void setMaxGiocatori(Integer maxGiocatori) { this.maxGiocatori = maxGiocatori; }
 
-    public Utente getUtenteCreazioneId() { return utenteCreazione; }
-    public void setUtenteCreazioneId(Utente utenteCreazione) { this.utenteCreazione = utenteCreazione; }
+    public UtenteDTO getUtenteCreazioneId() { return utenteCreazione; }
+    public void setUtenteCreazioneId(Utente utenteCreazione) { this.utenteCreazione = UtenteDTO.buildUtenteDTOFromModel(utenteCreazione); }
 
     public Set<UtenteDTO> getPartecipanti() { return partecipanti; }
     public void setPartecipanti(Set<UtenteDTO> partecipanti) { this.partecipanti = partecipanti; }
@@ -111,7 +112,7 @@ public class TorneoDTO {
         result.setEloMinimo(this.eloMinimo);
         result.setQuotaIscrizione(this.quotaIscrizione);
         result.setMaxGiocatori(this.maxGiocatori);
-        result.setUtenteCreazione(this.utenteCreazione);
+        result.setUtenteCreazione(this.utenteCreazione.buildUtenteModel(false));
         // I partecipanti vengono solitamente gestiti tramite logica di business nel Service
         return result;
     }

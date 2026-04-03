@@ -105,17 +105,43 @@ public class TorneoServiceImpl implements TorneoService {
         return torneiCompatibili;
     }
 
-//    @Transactional
-//    public TorneoDTO abbandonaTorneo(){
-//
-//        Long idAttuale = securityUtil.getCurrentUserId();
-//        Utente utenteLoggato = utenteRepository.findById(idAttuale).orElseThrow(() -> new RuntimeException("Utente con ID " + idAttuale + " non trovato"));
-//        Torneo torneo = utenteLoggato.getTorneo();
-//
-//        Set<Utente> partecipanti= torneo.getPartecipanti();
-//        if(partecipanti.contains(utenteLoggato))
-//            partecipanti.remove(utenteLoggato);
-//
-//    }
+    @Transactional
+    public TorneoDTO abbandonaTorneo(){
+
+        Long idAttuale = securityUtil.getCurrentUserId();
+        Utente utenteLoggato = utenteRepository.findById(idAttuale).orElseThrow(() -> new RuntimeException("Utente con ID " + idAttuale + " non trovato"));
+        Torneo torneo = utenteLoggato.getTorneo();
+        if (torneo == null) {
+            throw new RuntimeException("L'utente non è iscritto a nessun torneo al momento.");
+        }
+
+        Set<Utente> partecipanti= torneo.getPartecipanti();
+
+        if(partecipanti.contains(utenteLoggato)) {
+            partecipanti.remove(utenteLoggato);
+            utenteLoggato.setTorneo(null);
+
+            utenteRepository.save(utenteLoggato);
+        }
+        else{
+            throw new RuntimeException("Utente non presente tra i partecipanti");
+        }
+
+        return TorneoDTO.buildTorneoDTOFromModel(torneo, true);
+    }
+
+
+    public TorneoDTO trovaTorneo(){
+
+        Long idAttuale = securityUtil.getCurrentUserId();
+        Utente utenteLoggato = utenteRepository.findById(idAttuale).orElseThrow(() -> new RuntimeException("Utente con ID " + idAttuale + " non trovato"));
+
+        Torneo torneoCorrente = utenteLoggato.getTorneo();
+        if(torneoCorrente != null)
+            return TorneoDTO.buildTorneoDTOFromModel(torneoCorrente, false);
+        else{
+            throw new ElementoNonTrovatoException("Non è presnete torneo a cui sei iscritto attualmente");
+        }
+    }
 
 }

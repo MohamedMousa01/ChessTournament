@@ -59,10 +59,21 @@ public class PlayController {
     }
 
 
-//    @DeleteMapping("/abbandona")
-//    public ResponseEntity<ResponseBusta<TorneoDTO>> abbandonaTorneo(){
-//
-//        TorneoDTO torneoDTO = torneoService.abbandonaTorneo();
-//    }
+    @DeleteMapping("/abbandona")
+    public ResponseEntity<ResponseBusta<TorneoDTO>> abbandonaTorneo(){
+
+        TorneoDTO torneoDTO = torneoService.abbandonaTorneo();
+        return ResponseEntity.ok(ResponseBusta.success(200, torneoDTO, "Utente rimosso correttamente dalla lista dei partecipanti"));
+    }
+
+
+    @GetMapping("/ultimo-torneo")
+    public ResponseEntity<ResponseBusta<TorneoDTO>> ultimoTorneo(){
+
+        TorneoDTO torneoDTO = torneoService.trovaTorneo();
+        return ResponseEntity.ok(ResponseBusta.success(200, torneoDTO, "Trovato il torneo a cui sei associato"));
+    }
+
+
 
 }

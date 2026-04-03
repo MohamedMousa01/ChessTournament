@@ -37,8 +37,6 @@ public class TorneoController {
         Utente utenteCorrente = utenteRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato nel database"));
 
-        List<Torneo> tornei = torneoService.listAllElements(utenteCorrente);
-
         List<TorneoDTO> dtos = torneoService.listAllElements(utenteCorrente)
                 .stream()
                 .map(t -> TorneoDTO.buildTorneoDTOFromModel(t, false))
@@ -102,7 +100,6 @@ public class TorneoController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(ResponseBusta.error(404, e.getMessage()));
         }
-
     }
 
 }
