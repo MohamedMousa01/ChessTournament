@@ -30,7 +30,7 @@ public class TorneoController {
     UtenteRepository utenteRepository;
 
     @GetMapping
-    public ResponseEntity<ResponseBusta<List<Torneo>>> getAll(Authentication authentication){
+    public ResponseEntity<ResponseBusta<List<TorneoDTO>>> getAll(Authentication authentication){
 
         String username = authentication.getName();
 
@@ -43,7 +43,7 @@ public class TorneoController {
                 .stream()
                 .map(t -> TorneoDTO.buildTorneoDTOFromModel(t, false))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseBusta.success(200, tornei, "Lista di tornei caricati correttamente"));
+        return ResponseEntity.ok(ResponseBusta.success(200, dtos, "Lista di tornei caricati correttamente"));
     }
 
     @GetMapping("/{id}")

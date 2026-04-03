@@ -36,7 +36,7 @@ public class Utente {
 
     @Check(constraints = "elo_minimo >= 0")
     @Column(name = "elorating")
-    private Integer eloRating = 0;
+    private Integer eloRating;
 
     @Column(name = "montepremi")
     private Double montePremi;

@@ -1,5 +1,6 @@
 package com.prova.chess.service;
 
+import com.prova.chess.dto.ImportoDTO;
 import com.prova.chess.dto.UtenteDTO;
 import com.prova.chess.model.Utente;
 
@@ -21,14 +22,11 @@ public interface UtenteService {
 
 	public UtenteDTO disattiva(Long id);
 
-	public List<Utente> findByExample(Utente example);
-
-	public Utente findByUsernameAndPassword(String username, String password);
-
-	public Utente eseguiAccesso(String username, String password);
-
-//	public void changeUserAbilitation(Long utenteInstanceId);
 
 	public Utente findByUsername(String username);
 
+	public Utente ricarica(Double importo);
+
+
+	public Utente iscriviti(Long id);
 }

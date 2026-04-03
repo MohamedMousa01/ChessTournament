@@ -36,6 +36,9 @@ public class UtenteDTO {
 	private Double montePremi;
 	private Set<String> ruoli; // Usiamo i codici dei ruoli (es. ROLE_ADMIN)
 
+	private Long torneoId;
+	private String denominazioneTorneo;
+
 	public UtenteDTO() {
 	}
 
@@ -50,7 +53,11 @@ public class UtenteDTO {
 		this.stato = stato;
 		this.eloRating = eloRating;
 		this.montePremi = montePremi;
+
+
 	}
+
+
 
 	// --- Getters e Setters ---
 
@@ -84,6 +91,17 @@ public class UtenteDTO {
 	public Set<String> getRuoli() { return ruoli; }
 	public void setRuoli(Set<String> ruoli) { this.ruoli = ruoli; }
 
+	public Long getTorneoId() {return torneoId;}
+	public void setTorneoId(Long torneoId) {this.torneoId = torneoId;}
+
+	public String getDenominazioneTorneo() {
+		return denominazioneTorneo;
+	}
+
+	public void setDenominazioneTorneo(String denominazioneTorneo) {
+		this.denominazioneTorneo = denominazioneTorneo;
+	}
+
 	// --- Metodi di Conversione ---
 
 	public static UtenteDTO buildUtenteDTOFromModel(Utente utenteModel) {
@@ -98,6 +116,11 @@ public class UtenteDTO {
 				utenteModel.getEloRating(),
 				utenteModel.getMontePremi()
 		);
+
+		if (utenteModel.getTorneo() != null) {
+			result.setTorneoId(utenteModel.getTorneo().getId());
+			result.setDenominazioneTorneo(utenteModel.getTorneo().getDenominazione());
+		}
 
 		if (utenteModel.getRuoli() != null) {
 			result.setRuoli(utenteModel.getRuoli().stream()

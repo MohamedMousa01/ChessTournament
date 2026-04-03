@@ -51,6 +51,7 @@ public class SecurityConfig  {
 						// Role-based endpoints
 						.requestMatchers("/api/utente/userInfo").authenticated()
 						.requestMatchers("/api/tornei").hasAnyRole("ADMIN", "ORGANIZER")
+						.requestMatchers("api/play").hasRole("PLAYER")
 						.requestMatchers("/api/admin/**").hasRole("ADMIN")
 				//		.requestMatchers("/**").hasAnyRole("ADMIN", "PLAYER", "ORGANIZER")
 

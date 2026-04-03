@@ -1,9 +1,15 @@
 package com.prova.chess.service;
 
+import com.prova.chess.dto.ImportoDTO;
 import com.prova.chess.dto.UtenteDTO;
 import com.prova.chess.model.Stato;
+import com.prova.chess.model.Torneo;
 import com.prova.chess.model.Utente;
+import com.prova.chess.repository.torneo.TorneoRepository;
 import com.prova.chess.repository.utente.UtenteRepository;
+import com.prova.chess.security.SecurityUtil;
+import com.prova.chess.web.api.exception.ElementoNonTrovatoException;
+import com.prova.chess.web.api.exception.TorneoCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,9 +24,14 @@ public class UtenteServiceImpl implements UtenteService {
 
 	@Autowired
 	private UtenteRepository repository;
+	@Autowired
+	private TorneoRepository torneoRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private SecurityUtil securityUtil;
 
 	public List<Utente> listAllUtenti() {
 		return (List<Utente>) repository.findAll();
@@ -67,38 +78,51 @@ public class UtenteServiceImpl implements UtenteService {
 		Utente utenteAggiornato = repository.save(utente);
 
 		return UtenteDTO.buildUtenteDTOFromModel(utenteAggiornato);
-
 	}
-
-	public List<Utente> findByExample(Utente example) {
-		// TODO Da implementare
-		return listAllUtenti();
-	}
-
-	public Utente eseguiAccesso(String username, String password) {
-		return repository.findByUsernameAndPasswordAndStato(username, password, Stato.ATTIVO);
-	}
-
-	public Utente findByUsernameAndPassword(String username, String password) {
-		return repository.findByUsernameAndPassword(username, password);
-	}
-
-//	@Transactional
-//	public void changeUserAbilitation(Long utenteInstanceId) {
-//		Utente utenteInstance = caricaSingoloUtente(utenteInstanceId);
-//		if (utenteInstance == null)
-//			throw new RuntimeException("Elemento non trovato.");
-//
-//		if (utenteInstance.getStato() == null || utenteInstance.getStato().equals(StatoUtente.CREATO))
-//			utenteInstance.setStato(StatoUtente.ATTIVO);
-//		else if (utenteInstance.getStato().equals(StatoUtente.ATTIVO))
-//			utenteInstance.setStato(StatoUtente.DISABILITATO);
-//		else if (utenteInstance.getStato().equals(StatoUtente.DISABILITATO))
-//			utenteInstance.setStato(StatoUtente.ATTIVO);
-//	}
 
 	public Utente findByUsername(String username) {
 		return repository.findByUsername(username).orElse(null);
 	}
+
+
+	@Transactional
+	public Utente ricarica(Double importo){
+		//Long id = securityUtil.getCurrentUserId();
+
+		//Utente playerAttuale = repository.findById(id).orElseThrow(() -> new TorneoCreationException("Utente loggato non trovato nel database."));
+
+		String username = securityUtil.getCurrentUsername();
+		Utente utente = repository.findByUsername(username).orElseThrow(() -> new TorneoCreationException("Utente loggato non trovato nel database."));
+
+		Double montePremiBefore = utente.getMontePremi();
+		utente.setMontePremi(montePremiBefore + importo);
+
+		return utente;
+	}
+
+
+	@Transactional
+	public Utente iscriviti(Long id){
+
+		String username = securityUtil.getCurrentUsername();
+		Utente utente = repository.findByUsername(username).orElseThrow(() -> new TorneoCreationException("Utente loggato non trovato nel database."));
+
+		if(utente.getTorneo() != null)
+			throw  new TorneoCreationException("L'utente è già iscritto ad un torneo, non si può iscrivere ad un altro");
+
+		Torneo torneoIscrizione = torneoRepository.findById(id).orElseThrow(() -> new TorneoCreationException("Torneo non trovato nel database."));
+		Double quota = torneoIscrizione.getQuotaIscrizione();
+
+		if(utente.getMontePremi() < quota || utente.getEloRating() < torneoIscrizione.getEloMinimo())
+			throw new ElementoNonTrovatoException("Errore nel controllo dati. Montepremi isufficente o Elo troppo basso!");
+
+		if(torneoIscrizione.getStato() != Stato.ATTIVO)
+			throw new ElementoNonTrovatoException("Non ti puoi iscrivere ad un torneo non attivo!");
+
+		utente.setTorneo(torneoIscrizione);
+		return utente;
+	}
+
+
 
 }

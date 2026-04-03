@@ -94,8 +94,28 @@ public class TorneoServiceImpl implements TorneoService {
         Torneo torneoAggiornato = torneoRepository.save(torneo);
 
         return TorneoDTO.buildTorneoDTOFromModel(torneoAggiornato, true);
-
     }
 
+
+    public List<Torneo> ricercaCompatibili(){
+        Long idAttuale = securityUtil.getCurrentUserId();
+        Utente utenteLoggato = utenteRepository.findById(idAttuale).orElseThrow(() -> new RuntimeException("Utente con ID " + idAttuale + " non trovato"));
+        Integer elo =  utenteLoggato.getEloRating();
+        List<Torneo> torneiCompatibili = torneoRepository.findByElo(elo);
+        return torneiCompatibili;
+    }
+
+//    @Transactional
+//    public TorneoDTO abbandonaTorneo(){
+//
+//        Long idAttuale = securityUtil.getCurrentUserId();
+//        Utente utenteLoggato = utenteRepository.findById(idAttuale).orElseThrow(() -> new RuntimeException("Utente con ID " + idAttuale + " non trovato"));
+//        Torneo torneo = utenteLoggato.getTorneo();
+//
+//        Set<Utente> partecipanti= torneo.getPartecipanti();
+//        if(partecipanti.contains(utenteLoggato))
+//            partecipanti.remove(utenteLoggato);
+//
+//    }
 
 }
